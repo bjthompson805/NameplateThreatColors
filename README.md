@@ -54,3 +54,7 @@ So the threat calls are made only from the addon's own event handler, which cach
 "secure". The hook reads that cache and paints the health bar, and makes no threat API calls itself.
 Reading frame fields, `UnitInParty`, and `PlayerUtil.IsPlayerEffectivelyTank()` inside the hook were all
 tested and are safe. Keep the threat calls out of the hook.
+
+## License
+
+[MIT](LICENSE)
