@@ -26,10 +26,33 @@ use `GetThreatStatusColor`, and it keeps its own status-to-color table.
 Requirements: turn on **Interface → Nameplates → Aggro Display → Health Bar Color**, be in a group,
 and be assigned the Tank role (`UnitGroupRolesAssigned("player") == "TANK"`).
 
+### Level on enemy names
+
+Nameplates of attackable units show the level before the name: `5 Boar`, `5+ Boar` for elites
+(elite, rare elite, and world boss), and `?? Boar` when the level is unknown (skull). The level uses
+Blizzard's creature difficulty colors (`GetCreatureDifficultyColor`):
+
+| Level compared to you | Color |
+|---|---|
+| 5 or more above, or `??` | Red |
+| 3 to 4 above | Orange |
+| Within 2 | Yellow |
+| Lower, but still gives XP | Green |
+| Too low to give XP | Grey |
+
 ## Install
 
 Clone or copy this folder into `World of Warcraft/_anniversary_/Interface/AddOns/NameplateThreatColors`,
 then restart the game or `/reload`.
+
+## Options
+
+**Options → AddOns → Nameplate Threat Colors** has a checkbox for each feature:
+
+- **Green health bar while you hold aggro as a tank**
+- **Show level before enemy names**
+
+Both are on by default. Changes apply immediately and are saved per account in `NameplateThreatColorsDB`.
 
 ## Configuration
 
@@ -54,6 +77,10 @@ So the threat calls are made only from the addon's own event handler, which cach
 "secure". The hook reads that cache and paints the health bar, and makes no threat API calls itself.
 Reading frame fields, `UnitInParty`, and `PlayerUtil.IsPlayerEffectivelyTank()` inside the hook were all
 tested and are safe. Keep the threat calls out of the hook.
+
+The level prefix follows the same rule as a precaution: `UnitLevel` and `UnitClassification` are called only
+from the event handler, which caches the finished string. The `CompactUnitFrame_UpdateName` hook only
+reads that cache and sets the name text.
 
 ## License
 
